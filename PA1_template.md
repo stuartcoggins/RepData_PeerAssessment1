@@ -6,7 +6,8 @@ date: "Sunday, June 14, 2015"
 output: html_document
 ---
 
-```{r}
+
+```r
 # Read in data
 all.data <- read.csv("activity.csv", sep = ",", header = T);
 
@@ -15,16 +16,31 @@ total.steps.per.day <- setNames(aggregate(all.data$steps, list(all.data$date), F
 
 # Histogram of steps per day
 hist(total.steps.per.day$steps)
+```
 
+![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-1.png) 
+
+```r
 # Median number of steps per day
 median(total.steps.per.day$steps);
+```
 
+```
+## [1] 10395
+```
+
+```r
 # Mean number of steps per day
 mean(total.steps.per.day$steps);
 ```
 
+```
+## [1] 9354.23
+```
 
-```{r}
+
+
+```r
 # Average daily activity pattern
 
 # Calculate total number of steps per day
@@ -32,22 +48,37 @@ average.steps.by.interval <- setNames(aggregate(all.data$steps, list(all.data$in
 
 # Time series of interval against average number of steps
 plot(x = average.steps.by.interval$interval, y = average.steps.by.interval$steps, type = "l")
+```
 
+![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2-1.png) 
+
+```r
 # Interval with the largest average number of steps
 average.steps.by.interval[which.max(average.steps.by.interval$steps), ]
 ```
 
+```
+##     interval    steps
+## 104      835 206.1698
+```
 
 
-```{r}
+
+
+```r
 # Imputing missing values
 
 # Count number of missing values
 sum(is.na(all.data$steps))
 ```
 
+```
+## [1] 2304
+```
 
-```{r}
+
+
+```r
 # Fill in the missing values with the mean for that interval
 
 # Join the dataframes together so that the average for each interval is known
@@ -63,16 +94,38 @@ names(all.data.imputed)[2] <- "steps"
 
 # Check if the number of NA rows has changed
 sum(is.na(all.data.imputed$steps))
+```
 
+```
+## [1] 0
+```
+
+```r
 # Plot histogram of data after imputation
 hist(all.data.imputed$steps);
+```
+
+![plot of chunk unnamed-chunk-4](figure/unnamed-chunk-4-1.png) 
+
+```r
 mean(all.data.imputed$steps);
+```
+
+```
+## [1] 37.3826
+```
+
+```r
 median(all.data.imputed$steps);
 ```
 
+```
+## [1] 0
+```
 
-```{r}
 
+
+```r
 # Change date datatype to actually be a date rather than character
 all.data.imputed$date <- as.POSIXlt(all.data.imputed$date)
 
@@ -87,6 +140,8 @@ average.steps.by.interval.and.daytype <- setNames(aggregate(all.data.imputed$ste
 library(ggplot2);
 ggplot(data = average.steps.by.interval.and.daytype, aes(interval, steps)) + geom_line() + facet_grid(day.type ~ .);
 ```
+
+![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5-1.png) 
 
 library(knitr)
 knit2html("Reproducible Research Assignment 1.Rmd")
